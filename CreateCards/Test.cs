@@ -1,18 +1,7 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CreateCards
+﻿namespace CreateCards
 {
-    using System.IO;
-    using System.Net.Mime;
-    using System.Runtime.InteropServices.WindowsRuntime;
-
-    using Newtonsoft.Json;
+    using NUnit.Framework;
+    using System;
 
     [TestFixture]
     public class Test
@@ -20,7 +9,7 @@ namespace CreateCards
         [Test]
         public void CreateCards()
         {
-            Card.CreateCards();
+            Card.CreateCards(AppDomain.CurrentDomain.BaseDirectory + @"/test.json");
             Assert.IsTrue(true);
         }
     }

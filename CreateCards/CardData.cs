@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CreateCards
+﻿namespace CreateCards
 {
+    using System.Collections.Generic;
+
     public class CardData
     {
         public string Name { get; set; }

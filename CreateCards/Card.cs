@@ -1,32 +1,36 @@
 ﻿// ReSharper disable PossibleLossOfFraction
 namespace CreateCards
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using System.Drawing;
     using System.IO;
     using Newtonsoft.Json;
 
     public static class Card
     {
-        public static void CreateCards()
+        public static Image CreateCards(string jsonFile)
         {
             const int resolution = 300;
             string json;
-            using (StreamReader r = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + @"/test.json"))
+            CardData data;
+            using (StreamReader r = new StreamReader(jsonFile))
             {
                 json = r.ReadToEnd();
             }
 
             if (string.IsNullOrEmpty(json))
             {
-                return;
+                return null;
             }
 
-            CardData data = JsonConvert.DeserializeObject<CardData>(json);
+            try
+            {
+                data = JsonConvert.DeserializeObject<CardData>(json);
+            }
+            catch
+            {
+                return null;
+            }
 
             List<Color> backColors = new List<Color>
             {
@@ -106,7 +110,7 @@ namespace CreateCards
                 g.DrawImage(image, (imageA4.Size.Width - image.Size.Width)/2, (imageA4.Size.Height - image.Size.Height) / 2);
             }
 
-            imageA4.Save(@"e:\cards.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+            return imageA4;
         }
 
         public static Image Create(int resolution, Color backColor, Color nameColor, Color textColor, string header, List<string> body, string footer)
