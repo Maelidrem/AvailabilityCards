@@ -8,7 +8,7 @@ namespace CreateCards
 
     public static class Card
     {
-        public static Image CreateCardsFromJson(string json, Size dimensions, int resolution = -1)
+        public static Image CreateCardsFromJson(string json, Size dimensions, int factor, int resolution = -1)
         {
             CardData data;
 
@@ -63,11 +63,9 @@ namespace CreateCards
                     Card.Create(dimensions, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedC, data.FooterRed, resolution)
                 }
             };
-
-            int width = images[0][0].Width;
-            int height = images[0][0].Height;
+            
             const int margin = 2;
-            Image image = new Bitmap(3 * width + 4 * margin, 3 * height + 4 * margin);
+            Image image = new Bitmap(3 * dimensions.Width + 4 * margin, 3 * dimensions.Height + 4 * margin);
             if (resolution > 0)
             {
                 ((Bitmap)image).SetResolution(resolution, resolution);
@@ -77,17 +75,17 @@ namespace CreateCards
             {
                 g.Clear(Color.Black);
                 g.DrawImage(images[0][0], margin, margin);
-                g.DrawImage(images[0][1], 2 * margin + width, margin);
-                g.DrawImage(images[0][2], 3 * margin + 2 * width, margin);
-                g.DrawImage(images[1][0], margin, 2 * margin + height);
-                g.DrawImage(images[1][1], 2 * margin + width, 2 * margin + height);
-                g.DrawImage(images[1][2], 3 * margin + 2 * width, 2 * margin + height);
-                g.DrawImage(images[2][0], margin, 3 * margin + 2 * height);
-                g.DrawImage(images[2][1], 2 * margin + width, 3 * margin + 2 * height);
-                g.DrawImage(images[2][2], 3 * margin + 2 * width, 3 * margin + 2 * height);
+                g.DrawImage(images[0][1], 2 * margin + dimensions.Width, margin);
+                g.DrawImage(images[0][2], 3 * margin + 2 * dimensions.Width, margin);
+                g.DrawImage(images[1][0], margin, 2 * margin + dimensions.Height);
+                g.DrawImage(images[1][1], 2 * margin + dimensions.Width, 2 * margin + dimensions.Height);
+                g.DrawImage(images[1][2], 3 * margin + 2 * dimensions.Width, 2 * margin + dimensions.Height);
+                g.DrawImage(images[2][0], margin, 3 * margin + 2 * dimensions.Height);
+                g.DrawImage(images[2][1], 2 * margin + dimensions.Width, 3 * margin + 2 * dimensions.Height);
+                g.DrawImage(images[2][2], 3 * margin + 2 * dimensions.Width, 3 * margin + 2 * dimensions.Height);
             }
 
-            Image imageA4 = new Bitmap(2480, 3508);
+            Image imageA4 = new Bitmap(dimensions.Width * factor, dimensions.Height * factor);
             if (resolution > 0)
             {
                 ((Bitmap)imageA4).SetResolution(resolution, resolution);

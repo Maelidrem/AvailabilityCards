@@ -65,7 +65,10 @@
 
         private void UpdatePreview()
         {
-            this.CurrentImage = Card.CreateCardsFromJson(JsonConvert.SerializeObject(this.currentData), new Size(this.pctCards.Width, this.pctCards.Height));
+            int factor = 4;
+            int width = this.pctCards.Width / factor;
+            int height = this.pctCards.Height / factor;
+            this.CurrentImage = Card.CreateCardsFromJson(JsonConvert.SerializeObject(this.currentData), new Size(width, height), factor);
             this.PaintImage();
         }
 
@@ -257,7 +260,13 @@
                 RestoreDirectory = true
             };
 
-            if (ofd.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(ofd.FileName))
+            if (ofd.ShowDialog() == DialogResult.OK && 
+                !string.IsNullOrEmpty(ofd.FileName))
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(ofd.FileName))
             {
                 return;
             }
