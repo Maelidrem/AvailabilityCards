@@ -1,9 +1,6 @@
 ﻿namespace CreateCards
 {
-    using Newtonsoft.Json;
     using NUnit.Framework;
-    using System;
-    using System.Drawing;
 
     [TestFixture]
     public class Test

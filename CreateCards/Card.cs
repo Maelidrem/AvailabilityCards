@@ -3,7 +3,7 @@ namespace CreateCards
 {
     using System.Collections.Generic;
     using System.Drawing;
-    using System.IO;
+
     using Newtonsoft.Json;
 
     public static class Card
@@ -33,9 +33,6 @@ namespace CreateCards
                 Color.White,
                 Color.White,
                 Color.White
-                //Color.FromArgb(219, 141, 99),
-                //Color.FromArgb(73, 73, 255),
-                //Color.FromArgb(33, 255, 248)
             };
 
             List<Color> textColors = new List<Color>
@@ -43,9 +40,6 @@ namespace CreateCards
                 Color.Black,
                 Color.Black,
                 Color.Black
-                //Color.FromArgb(219, 99, 135),
-                //Color.FromArgb(73, 255, 76),
-                //Color.FromArgb(148, 255, 33)
             };
 
             List<List<Image>> images = new List<List<Image>>
@@ -55,19 +49,19 @@ namespace CreateCards
                     Card.Create(dimensions, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenA, data.FooterGreen, resolution),
                     Card.Create(dimensions, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenB, data.FooterGreen, resolution),
                     Card.Create(dimensions, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenC, data.FooterGreen, resolution)
-                },               
-                new List<Image>  
-                {                
+                },
+                new List<Image>
+                {
                     Card.Create(dimensions, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeA, data.FooterOrange, resolution),
                     Card.Create(dimensions, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeB, data.FooterOrange, resolution),
                     Card.Create(dimensions, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeC, data.FooterOrange, resolution)
-                },              
-                new List<Image> 
-                {               
+                },
+                new List<Image>
+                {
                     Card.Create(dimensions, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedA, data.FooterRed, resolution),
                     Card.Create(dimensions, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedB, data.FooterRed, resolution),
                     Card.Create(dimensions, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedC, data.FooterRed, resolution)
-                },
+                }
             };
 
             int width = images[0][0].Width;
@@ -92,7 +86,6 @@ namespace CreateCards
                 g.DrawImage(images[2][1], 2 * margin + width, 3 * margin + 2 * height);
                 g.DrawImage(images[2][2], 3 * margin + 2 * width, 3 * margin + 2 * height);
             }
-
 
             Image imageA4 = new Bitmap(2480, 3508);
             if (resolution > 0)
@@ -164,7 +157,6 @@ namespace CreateCards
                 drawing.DrawLine(pen,
                                  new Point(linePad, (int)(imageSize.Height - 10 - textSize.Height - interLine / 2)),
                                  new Point(image.Width - linePad, (int)(imageSize.Height - 10 - textSize.Height - interLine / 2)));
-
             }
 
             drawing.Save();

@@ -19,7 +19,6 @@
             this.TextRedA = new List<string>();
             this.TextRedB = new List<string>();
             this.TextRedC = new List<string>();
-
         }
 
         public string Name { get; set; }

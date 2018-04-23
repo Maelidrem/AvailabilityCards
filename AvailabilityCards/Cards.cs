@@ -1,31 +1,67 @@
 ﻿namespace AvailabilityCards
 {
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
-    using System.Windows.Forms;
+    using System.Drawing.Imaging;
     using System.IO;
     using System.Linq;
+    using System.Windows.Forms;
 
     using CreateCards;
+
     using Newtonsoft.Json;
-    using System.Collections.Generic;
 
     public partial class Cards : Form
     {
-        CardData currentData = new CardData();
+        private const int Resolution = 300;
+
+        private readonly Dictionary<CardDataType, string> defaultDisplayedText = new Dictionary<CardDataType, string>
+        {
+            {CardDataType.Name, "Please Enter Your Name"},
+            {CardDataType.TextGreenA, "Please Enter The Text To Be Displayed On The First Green Card"},
+            {CardDataType.TextGreenB, "Please Enter The Text To Be Displayed On The Second Green Card"},
+            {CardDataType.TextGreenC, "Please Enter The Text To Be Displayed On The Third Green Card"},
+            {CardDataType.FooterGreen, "Please Enter The Footer For Green Cards"},
+            {CardDataType.TextOrangeA, "Please Enter The Text To Be Displayed On The First Orange Card"},
+            {CardDataType.TextOrangeB, "Please Enter The Text To Be Displayed On The Second Orange Card"},
+            {CardDataType.TextOrangeC, "Please Enter The Text To Be Displayed On The Third Orange Card"},
+            {CardDataType.FooterOrange, "Please Enter The Footer For Orange Cards"},
+            {CardDataType.TextRedA, "Please Enter The Text To Be Displayed On The First Red Card"},
+            {CardDataType.TextRedB, "Please Enter The Text To Be Displayed On The Second Red Card"},
+            {CardDataType.TextRedC, "Please Enter The Text To Be Displayed On The Third Red Card"},
+            {CardDataType.FooterRed, "Please Enter The Footer For Red Cards"}
+        };
+
+        private readonly Bitmap emptyImage;
+        private CardData currentData = new CardData();
+
+        public Cards()
+        {
+            this.InitializeComponent();
+            this.InitTextBoxes();
+            this.emptyImage = new Bitmap(this.pctCards.Width, this.pctCards.Height);
+        }
+
+        public Image CurrentImage { get; set; }
+
         private void OnTextChanged(object sender, EventArgs e)
         {
-            if (sender is TextBox)
+            TextBox box = sender as TextBox;
+            if (box == null)
             {
-                CardDataType type = (CardDataType)(((TextBox)sender).Tag);
-                if (((TextBox)sender).Text != this.defaultDisplayedText[type])
-                {
-                    this.UpdateCardData(type, ((TextBox)sender).Text);
-                    this.UpdatePreview();
-                }
+                return;
             }
+
+            CardDataType type = (CardDataType)box.Tag;
+            if (box.Text == this.defaultDisplayedText[type])
+            {
+                return;
+            }
+
+            this.UpdateCardData(type, box.Text);
+            this.UpdatePreview();
         }
-        public Image CurrentImage { get; set; }
 
         private void UpdatePreview()
         {
@@ -33,13 +69,11 @@
             this.PaintImage();
         }
 
-        private Bitmap emptyImage;
-
         private void PaintImage()
         {
             RectangleF rectSource = new RectangleF(0, 0, this.CurrentImage.Width, this.CurrentImage.Height);
             RectangleF rectDestination = new RectangleF(0, 0, this.pctCards.Width, this.pctCards.Height);
-            
+
             using (Graphics g = Graphics.FromImage(this.emptyImage))
             {
                 g.DrawImage(this.CurrentImage, rectDestination, rectSource, GraphicsUnit.Pixel);
@@ -50,7 +84,7 @@
 
         private void UpdateCardData(CardDataType type, string text)
         {
-            string[] tmpTxt = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            string[] tmpTxt = text.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
             switch (type)
             {
                 case CardDataType.Name:
@@ -97,49 +131,33 @@
 
         private void OnTextLeave(object sender, EventArgs e)
         {
-            if (sender is TextBox && ((TextBox)sender).Text.Length == 0)
+            TextBox box = sender as TextBox;
+            if (box == null || box.Text.Length != 0)
             {
-                CardDataType type = (CardDataType)(((TextBox)sender).Tag);
-                ((TextBox)sender).Text = this.defaultDisplayedText[type];
-                ((TextBox)sender).ForeColor = SystemColors.GrayText;
+                return;
             }
+
+            CardDataType type = (CardDataType)box.Tag;
+            box.Text = this.defaultDisplayedText[type];
+            box.ForeColor = SystemColors.GrayText;
         }
 
         private void OnTextEnter(object sender, EventArgs e)
         {
-            if (sender is TextBox)
+            TextBox box = sender as TextBox;
+            if (box == null)
             {
-                CardDataType type = (CardDataType)(((TextBox)sender).Tag);
-                if (((TextBox)sender).Text == this.defaultDisplayedText[type])
-                {
-                    ((TextBox)sender).Text = string.Empty;
-                    ((TextBox)sender).ForeColor = SystemColors.WindowText;
-                }
+                return;
             }
-        }
 
-        private Dictionary<CardDataType, string> defaultDisplayedText = new Dictionary<CardDataType, string>
-        {
-            { CardDataType.Name, "Please Enter Your Name" },
-            { CardDataType.TextGreenA, "Please Enter The Text To Be Displayed On The First Green Card" },
-            { CardDataType.TextGreenB, "Please Enter The Text To Be Displayed On The Second Green Card" },
-            { CardDataType.TextGreenC, "Please Enter The Text To Be Displayed On The Third Green Card" },
-            { CardDataType.FooterGreen, "Please Enter The Footer For Green Cards" },
-            { CardDataType.TextOrangeA, "Please Enter The Text To Be Displayed On The First Orange Card" },
-            { CardDataType.TextOrangeB, "Please Enter The Text To Be Displayed On The Second Orange Card" },
-            { CardDataType.TextOrangeC, "Please Enter The Text To Be Displayed On The Third Orange Card" },
-            { CardDataType.FooterOrange, "Please Enter The Footer For Orange Cards" },
-            { CardDataType.TextRedA, "Please Enter The Text To Be Displayed On The First Red Card" },
-            { CardDataType.TextRedB, "Please Enter The Text To Be Displayed On The Second Red Card" },
-            { CardDataType.TextRedC, "Please Enter The Text To Be Displayed On The Third Red Card" },
-            { CardDataType.FooterRed, "Please Enter The Footer For Red Cards" },
-        };
-        
-        public Cards()
-        {
-            this.InitializeComponent();
-            this.InitTextBoxes();
-            this.emptyImage = new Bitmap(this.pctCards.Width, this.pctCards.Height);
+            CardDataType type = (CardDataType)box.Tag;
+            if (box.Text != this.defaultDisplayedText[type])
+            {
+                return;
+            }
+
+            box.Text = string.Empty;
+            box.ForeColor = SystemColors.WindowText;
         }
 
         private void InitTextBoxes()
@@ -186,61 +204,47 @@
             this.tbRedC.Text = this.defaultDisplayedText[CardDataType.TextRedC];
             this.tbFooterRed.Text = this.defaultDisplayedText[CardDataType.FooterRed];
 
-            this.tbName.TextChanged += new EventHandler(this.OnTextChanged);
-            this.tbGreenA.TextChanged += new EventHandler(this.OnTextChanged);
-            this.tbGreenB.TextChanged += new EventHandler(this.OnTextChanged);
-            this.tbGreenC.TextChanged += new EventHandler(this.OnTextChanged);
-            this.tbFooterGreen.TextChanged += new EventHandler(this.OnTextChanged);
-            this.tbOrangeA.TextChanged += new EventHandler(this.OnTextChanged);
-            this.tbOrangeB.TextChanged += new EventHandler(this.OnTextChanged);
-            this.tbOrangeC.TextChanged += new EventHandler(this.OnTextChanged);
-            this.tbFooterOrange.TextChanged += new EventHandler(this.OnTextChanged);
-            this.tbRedA.TextChanged += new EventHandler(this.OnTextChanged);
-            this.tbRedB.TextChanged += new EventHandler(this.OnTextChanged);
-            this.tbRedC.TextChanged += new EventHandler(this.OnTextChanged);
-            this.tbFooterRed.TextChanged += new EventHandler(this.OnTextChanged);
+            this.tbName.TextChanged += this.OnTextChanged;
+            this.tbGreenA.TextChanged += this.OnTextChanged;
+            this.tbGreenB.TextChanged += this.OnTextChanged;
+            this.tbGreenC.TextChanged += this.OnTextChanged;
+            this.tbFooterGreen.TextChanged += this.OnTextChanged;
+            this.tbOrangeA.TextChanged += this.OnTextChanged;
+            this.tbOrangeB.TextChanged += this.OnTextChanged;
+            this.tbOrangeC.TextChanged += this.OnTextChanged;
+            this.tbFooterOrange.TextChanged += this.OnTextChanged;
+            this.tbRedA.TextChanged += this.OnTextChanged;
+            this.tbRedB.TextChanged += this.OnTextChanged;
+            this.tbRedC.TextChanged += this.OnTextChanged;
+            this.tbFooterRed.TextChanged += this.OnTextChanged;
 
-            this.tbName.Leave += new EventHandler(this.OnTextLeave);
-            this.tbGreenA.Leave += new EventHandler(this.OnTextLeave);
-            this.tbGreenB.Leave += new EventHandler(this.OnTextLeave);
-            this.tbGreenC.Leave += new EventHandler(this.OnTextLeave);
-            this.tbFooterGreen.Leave += new EventHandler(this.OnTextLeave);
-            this.tbOrangeA.Leave += new EventHandler(this.OnTextLeave);
-            this.tbOrangeB.Leave += new EventHandler(this.OnTextLeave);
-            this.tbOrangeC.Leave += new EventHandler(this.OnTextLeave);
-            this.tbFooterOrange.Leave += new EventHandler(this.OnTextLeave);
-            this.tbRedA.Leave += new EventHandler(this.OnTextLeave);
-            this.tbRedB.Leave += new EventHandler(this.OnTextLeave);
-            this.tbRedC.Leave += new EventHandler(this.OnTextLeave);
-            this.tbFooterRed.Leave += new EventHandler(this.OnTextLeave);
+            this.tbName.Leave += this.OnTextLeave;
+            this.tbGreenA.Leave += this.OnTextLeave;
+            this.tbGreenB.Leave += this.OnTextLeave;
+            this.tbGreenC.Leave += this.OnTextLeave;
+            this.tbFooterGreen.Leave += this.OnTextLeave;
+            this.tbOrangeA.Leave += this.OnTextLeave;
+            this.tbOrangeB.Leave += this.OnTextLeave;
+            this.tbOrangeC.Leave += this.OnTextLeave;
+            this.tbFooterOrange.Leave += this.OnTextLeave;
+            this.tbRedA.Leave += this.OnTextLeave;
+            this.tbRedB.Leave += this.OnTextLeave;
+            this.tbRedC.Leave += this.OnTextLeave;
+            this.tbFooterRed.Leave += this.OnTextLeave;
 
-            this.tbName.Enter += new EventHandler(this.OnTextEnter);
-            this.tbGreenA.Enter += new EventHandler(this.OnTextEnter);
-            this.tbGreenB.Enter += new EventHandler(this.OnTextEnter);
-            this.tbGreenC.Enter += new EventHandler(this.OnTextEnter);
-            this.tbFooterGreen.Enter += new EventHandler(this.OnTextEnter);
-            this.tbOrangeA.Enter += new EventHandler(this.OnTextEnter);
-            this.tbOrangeB.Enter += new EventHandler(this.OnTextEnter);
-            this.tbOrangeC.Enter += new EventHandler(this.OnTextEnter);
-            this.tbFooterOrange.Enter += new EventHandler(this.OnTextEnter); 
-            this.tbRedA.Enter += new EventHandler(this.OnTextEnter);
-            this.tbRedB.Enter += new EventHandler(this.OnTextEnter);
-            this.tbRedC.Enter += new EventHandler(this.OnTextEnter);
-            this.tbFooterRed.Enter += new EventHandler(this.OnTextEnter);
-
-            //this.tbName.
-            //this.tbGreenA.
-            //this.tbGreenB.
-            //this.tbGreenC.
-            //this.tbFooterGreen.
-            //this.tbOrangeA.
-            //this.tbOrangeB.
-            //this.tbOrangeC.
-            //this.tbFooterOrange.
-            //this.tbRedA.
-            //this.tbRedB.
-            //this.tbRedC.
-            //this.tbFooterRed.
+            this.tbName.Enter += this.OnTextEnter;
+            this.tbGreenA.Enter += this.OnTextEnter;
+            this.tbGreenB.Enter += this.OnTextEnter;
+            this.tbGreenC.Enter += this.OnTextEnter;
+            this.tbFooterGreen.Enter += this.OnTextEnter;
+            this.tbOrangeA.Enter += this.OnTextEnter;
+            this.tbOrangeB.Enter += this.OnTextEnter;
+            this.tbOrangeC.Enter += this.OnTextEnter;
+            this.tbFooterOrange.Enter += this.OnTextEnter;
+            this.tbRedA.Enter += this.OnTextEnter;
+            this.tbRedB.Enter += this.OnTextEnter;
+            this.tbRedC.Enter += this.OnTextEnter;
+            this.tbFooterRed.Enter += this.OnTextEnter;
         }
 
         private void OnLoad(object sender, EventArgs e)
@@ -248,12 +252,12 @@
             OpenFileDialog ofd = new OpenFileDialog
             {
                 InitialDirectory = "c:\\",
-                Filter = "json files (*.json)|*.json|All files (*.*)|*.*",
+                Filter = @"json files (*.json)|*.json|All files (*.*)|*.*",
                 FilterIndex = 2,
                 RestoreDirectory = true
             };
 
-            if (ofd.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(ofd.FileName) )
+            if (ofd.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(ofd.FileName))
             {
                 return;
             }
@@ -291,7 +295,6 @@
             preview.Show();
         }
 
-        private const int resolution = 300;
         private void OnSave(object sender, EventArgs e)
         {
             if (this.CurrentImage == null)
@@ -301,7 +304,7 @@
 
             SaveFileDialog sfd = new SaveFileDialog
             {
-                Filter = "jpg files (*.jpg)|*.jpg",
+                Filter = @"jpg files (*.jpg)|*.jpg",
                 FilterIndex = 1,
                 RestoreDirectory = true
             };
@@ -310,9 +313,9 @@
             {
                 const float inchInMm = 25.4F;
                 Size sizeInMm = new Size(49, 75);
-                Size imageSize = new Size((int)(sizeInMm.Width / inchInMm * resolution), (int)(sizeInMm.Height / inchInMm * resolution));
-                Image imgToSave = Card.CreateCardsFromJson(JsonConvert.SerializeObject(this.currentData), imageSize, resolution);
-                imgToSave.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                Size imageSize = new Size((int)(sizeInMm.Width / inchInMm * Cards.Resolution), (int)(sizeInMm.Height / inchInMm * Cards.Resolution));
+                Image imgToSave = Card.CreateCardsFromJson(JsonConvert.SerializeObject(this.currentData), imageSize, Cards.Resolution);
+                imgToSave.Save(sfd.FileName, ImageFormat.Jpeg);
             }
 
             this.CurrentImage = null;

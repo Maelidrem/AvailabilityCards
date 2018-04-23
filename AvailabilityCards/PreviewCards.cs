@@ -1,18 +1,21 @@
 ﻿namespace AvailabilityCards
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.Windows.Forms;
 
     public partial class PreviewCards : Form
     {
-        private Image image;
+        private readonly Image image;
+
         public PreviewCards(Image image)
         {
             this.image = image;
             this.InitializeComponent();
-            this.Paint += new PaintEventHandler(this.OnPaint);
+            this.Paint += this.OnPaint;
         }
-        
+
+        [SuppressMessage("ReSharper", "PossibleLossOfFraction")]
         private void OnPaint(object sender, PaintEventArgs e)
         {
             RectangleF srcRect = new RectangleF(0, 0, this.image.Size.Width, this.image.Size.Height);
