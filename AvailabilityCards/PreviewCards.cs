@@ -12,7 +12,7 @@
             this.InitializeComponent();
             this.Paint += new PaintEventHandler(this.OnPaint);
         }
-
+        
         private void OnPaint(object sender, PaintEventArgs e)
         {
             RectangleF srcRect = new RectangleF(0, 0, this.image.Size.Width, this.image.Size.Height);

@@ -32,6 +32,21 @@
             this.btnPreview = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnSample = new System.Windows.Forms.Button();
+            this.tbName = new System.Windows.Forms.TextBox();
+            this.tbGreenA = new System.Windows.Forms.TextBox();
+            this.tbGreenB = new System.Windows.Forms.TextBox();
+            this.tbGreenC = new System.Windows.Forms.TextBox();
+            this.tbFooterGreen = new System.Windows.Forms.TextBox();
+            this.tbFooterOrange = new System.Windows.Forms.TextBox();
+            this.tbRedA = new System.Windows.Forms.TextBox();
+            this.tbRedB = new System.Windows.Forms.TextBox();
+            this.tbRedC = new System.Windows.Forms.TextBox();
+            this.tbFooterRed = new System.Windows.Forms.TextBox();
+            this.tbOrangeC = new System.Windows.Forms.TextBox();
+            this.tbOrangeB = new System.Windows.Forms.TextBox();
+            this.tbOrangeA = new System.Windows.Forms.TextBox();
+            this.pctCards = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pctCards)).BeginInit();
             this.SuspendLayout();
             // 
             // btnLoad
@@ -40,7 +55,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLoad.Location = new System.Drawing.Point(12, 12);
             this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(127, 23);
+            this.btnLoad.Size = new System.Drawing.Size(1254, 23);
             this.btnLoad.TabIndex = 0;
             this.btnLoad.Text = "Load json";
             this.btnLoad.UseVisualStyleBackColor = true;
@@ -53,7 +68,7 @@
             this.btnPreview.Enabled = false;
             this.btnPreview.Location = new System.Drawing.Point(12, 41);
             this.btnPreview.Name = "btnPreview";
-            this.btnPreview.Size = new System.Drawing.Size(245, 23);
+            this.btnPreview.Size = new System.Drawing.Size(1372, 23);
             this.btnPreview.TabIndex = 1;
             this.btnPreview.Text = "Preview Cards";
             this.btnPreview.UseVisualStyleBackColor = true;
@@ -66,7 +81,7 @@
             this.btnSave.Enabled = false;
             this.btnSave.Location = new System.Drawing.Point(12, 70);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(245, 23);
+            this.btnSave.Size = new System.Drawing.Size(1372, 23);
             this.btnSave.TabIndex = 2;
             this.btnSave.Text = "Save Cards";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -75,7 +90,7 @@
             // btnSample
             // 
             this.btnSample.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSample.Location = new System.Drawing.Point(145, 12);
+            this.btnSample.Location = new System.Drawing.Point(1272, 12);
             this.btnSample.Name = "btnSample";
             this.btnSample.Size = new System.Drawing.Size(112, 23);
             this.btnSample.TabIndex = 3;
@@ -83,18 +98,154 @@
             this.btnSample.UseVisualStyleBackColor = true;
             this.btnSample.Click += new System.EventHandler(this.OnSample);
             // 
+            // tbName
+            // 
+            this.tbName.Location = new System.Drawing.Point(12, 99);
+            this.tbName.Name = "tbName";
+            this.tbName.Size = new System.Drawing.Size(711, 20);
+            this.tbName.TabIndex = 4;
+            // 
+            // tbGreenA
+            // 
+            this.tbGreenA.Location = new System.Drawing.Point(12, 125);
+            this.tbGreenA.Multiline = true;
+            this.tbGreenA.Name = "tbGreenA";
+            this.tbGreenA.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbGreenA.Size = new System.Drawing.Size(233, 237);
+            this.tbGreenA.TabIndex = 5;
+            // 
+            // tbGreenB
+            // 
+            this.tbGreenB.Location = new System.Drawing.Point(251, 125);
+            this.tbGreenB.Multiline = true;
+            this.tbGreenB.Name = "tbGreenB";
+            this.tbGreenB.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbGreenB.Size = new System.Drawing.Size(233, 237);
+            this.tbGreenB.TabIndex = 6;
+            // 
+            // tbGreenC
+            // 
+            this.tbGreenC.Location = new System.Drawing.Point(490, 125);
+            this.tbGreenC.Multiline = true;
+            this.tbGreenC.Name = "tbGreenC";
+            this.tbGreenC.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbGreenC.Size = new System.Drawing.Size(233, 237);
+            this.tbGreenC.TabIndex = 7;
+            // 
+            // tbFooterGreen
+            // 
+            this.tbFooterGreen.Location = new System.Drawing.Point(12, 368);
+            this.tbFooterGreen.Name = "tbFooterGreen";
+            this.tbFooterGreen.Size = new System.Drawing.Size(711, 20);
+            this.tbFooterGreen.TabIndex = 8;
+            // 
+            // tbFooterOrange
+            // 
+            this.tbFooterOrange.Location = new System.Drawing.Point(12, 637);
+            this.tbFooterOrange.Name = "tbFooterOrange";
+            this.tbFooterOrange.Size = new System.Drawing.Size(711, 20);
+            this.tbFooterOrange.TabIndex = 14;
+            // 
+            // tbRedA
+            // 
+            this.tbRedA.Location = new System.Drawing.Point(12, 663);
+            this.tbRedA.Multiline = true;
+            this.tbRedA.Name = "tbRedA";
+            this.tbRedA.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbRedA.Size = new System.Drawing.Size(233, 237);
+            this.tbRedA.TabIndex = 17;
+            // 
+            // tbRedB
+            // 
+            this.tbRedB.Location = new System.Drawing.Point(251, 663);
+            this.tbRedB.Multiline = true;
+            this.tbRedB.Name = "tbRedB";
+            this.tbRedB.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbRedB.Size = new System.Drawing.Size(233, 237);
+            this.tbRedB.TabIndex = 18;
+            // 
+            // tbRedC
+            // 
+            this.tbRedC.Location = new System.Drawing.Point(490, 663);
+            this.tbRedC.Multiline = true;
+            this.tbRedC.Name = "tbRedC";
+            this.tbRedC.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbRedC.Size = new System.Drawing.Size(233, 237);
+            this.tbRedC.TabIndex = 19;
+            // 
+            // tbFooterRed
+            // 
+            this.tbFooterRed.Location = new System.Drawing.Point(12, 906);
+            this.tbFooterRed.Name = "tbFooterRed";
+            this.tbFooterRed.Size = new System.Drawing.Size(711, 20);
+            this.tbFooterRed.TabIndex = 20;
+            // 
+            // tbOrangeC
+            // 
+            this.tbOrangeC.Location = new System.Drawing.Point(490, 394);
+            this.tbOrangeC.Multiline = true;
+            this.tbOrangeC.Name = "tbOrangeC";
+            this.tbOrangeC.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbOrangeC.Size = new System.Drawing.Size(233, 237);
+            this.tbOrangeC.TabIndex = 13;
+            // 
+            // tbOrangeB
+            // 
+            this.tbOrangeB.Location = new System.Drawing.Point(251, 394);
+            this.tbOrangeB.Multiline = true;
+            this.tbOrangeB.Name = "tbOrangeB";
+            this.tbOrangeB.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbOrangeB.Size = new System.Drawing.Size(233, 237);
+            this.tbOrangeB.TabIndex = 12;
+            // 
+            // tbOrangeA
+            // 
+            this.tbOrangeA.Location = new System.Drawing.Point(12, 394);
+            this.tbOrangeA.Multiline = true;
+            this.tbOrangeA.Name = "tbOrangeA";
+            this.tbOrangeA.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbOrangeA.Size = new System.Drawing.Size(233, 237);
+            this.tbOrangeA.TabIndex = 11;
+            // 
+            // pctCards
+            // 
+            this.pctCards.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pctCards.Location = new System.Drawing.Point(729, 99);
+            this.pctCards.Name = "pctCards";
+            this.pctCards.Size = new System.Drawing.Size(655, 827);
+            this.pctCards.TabIndex = 21;
+            this.pctCards.TabStop = false;
+            // 
             // Cards
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(269, 107);
+            this.ClientSize = new System.Drawing.Size(1396, 937);
+            this.Controls.Add(this.pctCards);
+            this.Controls.Add(this.tbFooterRed);
+            this.Controls.Add(this.tbRedC);
+            this.Controls.Add(this.tbRedB);
+            this.Controls.Add(this.tbRedA);
+            this.Controls.Add(this.tbFooterOrange);
+            this.Controls.Add(this.tbOrangeC);
+            this.Controls.Add(this.tbOrangeB);
+            this.Controls.Add(this.tbOrangeA);
+            this.Controls.Add(this.tbFooterGreen);
+            this.Controls.Add(this.tbGreenC);
+            this.Controls.Add(this.tbGreenB);
+            this.Controls.Add(this.tbGreenA);
+            this.Controls.Add(this.tbName);
             this.Controls.Add(this.btnSample);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnPreview);
             this.Controls.Add(this.btnLoad);
             this.Name = "Cards";
             this.Text = "Card Generator";
+            ((System.ComponentModel.ISupportInitialize)(this.pctCards)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -104,6 +255,20 @@
         private System.Windows.Forms.Button btnPreview;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnSample;
+        private System.Windows.Forms.TextBox tbName;
+        private System.Windows.Forms.TextBox tbGreenA;
+        private System.Windows.Forms.TextBox tbGreenB;
+        private System.Windows.Forms.TextBox tbGreenC;
+        private System.Windows.Forms.TextBox tbFooterGreen;
+        private System.Windows.Forms.TextBox tbFooterOrange;
+        private System.Windows.Forms.TextBox tbRedA;
+        private System.Windows.Forms.TextBox tbRedB;
+        private System.Windows.Forms.TextBox tbRedC;
+        private System.Windows.Forms.TextBox tbFooterRed;
+        private System.Windows.Forms.TextBox tbOrangeC;
+        private System.Windows.Forms.TextBox tbOrangeB;
+        private System.Windows.Forms.TextBox tbOrangeA;
+        private System.Windows.Forms.PictureBox pctCards;
     }
 }
 
