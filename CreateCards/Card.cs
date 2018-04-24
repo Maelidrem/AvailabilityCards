@@ -8,9 +8,14 @@ namespace CreateCards
 
     public static class Card
     {
-        public static Image CreateCardsFromJson(string json, Size dimensions, int factor, int resolution = -1)
+        private const int resolution = 300;
+
+        public static Image CreateCardsFromJson(string json)
         {
             CardData data;
+            const float inchInMm = 25.4F;
+            Size sizeInMm = new Size(52, 80);
+            Size imageSize = new Size((int)(sizeInMm.Width / inchInMm * resolution), (int)(sizeInMm.Height / inchInMm * resolution));
 
             try
             {
@@ -46,50 +51,44 @@ namespace CreateCards
             {
                 new List<Image>
                 {
-                    Card.Create(dimensions, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenA, data.FooterGreen, resolution),
-                    Card.Create(dimensions, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenB, data.FooterGreen, resolution),
-                    Card.Create(dimensions, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenC, data.FooterGreen, resolution)
+                    Card.Create(imageSize, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenA, data.FooterGreen),
+                    Card.Create(imageSize, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenB, data.FooterGreen),
+                    Card.Create(imageSize, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenC, data.FooterGreen)
                 },
                 new List<Image>
                 {
-                    Card.Create(dimensions, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeA, data.FooterOrange, resolution),
-                    Card.Create(dimensions, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeB, data.FooterOrange, resolution),
-                    Card.Create(dimensions, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeC, data.FooterOrange, resolution)
+                    Card.Create(imageSize, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeA, data.FooterOrange),
+                    Card.Create(imageSize, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeB, data.FooterOrange),
+                    Card.Create(imageSize, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeC, data.FooterOrange)
                 },
                 new List<Image>
                 {
-                    Card.Create(dimensions, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedA, data.FooterRed, resolution),
-                    Card.Create(dimensions, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedB, data.FooterRed, resolution),
-                    Card.Create(dimensions, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedC, data.FooterRed, resolution)
+                    Card.Create(imageSize, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedA, data.FooterRed),
+                    Card.Create(imageSize, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedB, data.FooterRed),
+                    Card.Create(imageSize, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedC, data.FooterRed)
                 }
             };
             
             const int margin = 2;
-            Image image = new Bitmap(3 * dimensions.Width + 4 * margin, 3 * dimensions.Height + 4 * margin);
-            if (resolution > 0)
-            {
-                ((Bitmap)image).SetResolution(resolution, resolution);
-            }
+            Image image = new Bitmap(3 * imageSize.Width + 4 * margin, 3 * imageSize.Height + 4 * margin);
+            ((Bitmap)image).SetResolution(resolution, resolution);
 
             using (Graphics g = Graphics.FromImage(image))
             {
                 g.Clear(Color.Black);
                 g.DrawImage(images[0][0], margin, margin);
-                g.DrawImage(images[0][1], 2 * margin + dimensions.Width, margin);
-                g.DrawImage(images[0][2], 3 * margin + 2 * dimensions.Width, margin);
-                g.DrawImage(images[1][0], margin, 2 * margin + dimensions.Height);
-                g.DrawImage(images[1][1], 2 * margin + dimensions.Width, 2 * margin + dimensions.Height);
-                g.DrawImage(images[1][2], 3 * margin + 2 * dimensions.Width, 2 * margin + dimensions.Height);
-                g.DrawImage(images[2][0], margin, 3 * margin + 2 * dimensions.Height);
-                g.DrawImage(images[2][1], 2 * margin + dimensions.Width, 3 * margin + 2 * dimensions.Height);
-                g.DrawImage(images[2][2], 3 * margin + 2 * dimensions.Width, 3 * margin + 2 * dimensions.Height);
+                g.DrawImage(images[0][1], 2 * margin + imageSize.Width, margin);
+                g.DrawImage(images[0][2], 3 * margin + 2 * imageSize.Width, margin);
+                g.DrawImage(images[1][0], margin, 2 * margin + imageSize.Height);
+                g.DrawImage(images[1][1], 2 * margin + imageSize.Width, 2 * margin + imageSize.Height);
+                g.DrawImage(images[1][2], 3 * margin + 2 * imageSize.Width, 2 * margin + imageSize.Height);
+                g.DrawImage(images[2][0], margin, 3 * margin + 2 * imageSize.Height);
+                g.DrawImage(images[2][1], 2 * margin + imageSize.Width, 3 * margin + 2 * imageSize.Height);
+                g.DrawImage(images[2][2], 3 * margin + 2 * imageSize.Width, 3 * margin + 2 * imageSize.Height);
             }
 
-            Image imageA4 = new Bitmap(dimensions.Width * factor, dimensions.Height * factor);
-            if (resolution > 0)
-            {
-                ((Bitmap)imageA4).SetResolution(resolution, resolution);
-            }
+            Bitmap imageA4 = new Bitmap((int)(210 * resolution / inchInMm), (int)(297 * resolution / inchInMm));
+            imageA4.SetResolution(resolution, resolution);
 
             using (Graphics g = Graphics.FromImage(imageA4))
             {
@@ -100,7 +99,7 @@ namespace CreateCards
             return imageA4;
         }
 
-        public static Image Create(Size imageSize, Color backColor, Color nameColor, Color textColor, string header, List<string> body, string footer, int resolution)
+        public static Image Create(Size imageSize, Color backColor, Color nameColor, Color textColor, string header, List<string> body, string footer)
         {
             const int linePad = 60;
             const string fontName = "MS Sans Serif";
@@ -110,10 +109,7 @@ namespace CreateCards
             Pen pen = new Pen(Color.Black);
 
             Image image = new Bitmap(imageSize.Width, imageSize.Height);
-            if (resolution > 0)
-            {
-                ((Bitmap)image).SetResolution(resolution, resolution);
-            }
+            ((Bitmap)image).SetResolution(resolution, resolution);
 
             Graphics drawing = Graphics.FromImage(image);
             drawing.Clear(backColor);

@@ -14,8 +14,6 @@
 
     public partial class Cards : Form
     {
-        private const int Resolution = 300;
-
         private readonly Dictionary<CardDataType, string> defaultDisplayedText = new Dictionary<CardDataType, string>
         {
             {CardDataType.Name, "Please Enter Your Name"},
@@ -65,10 +63,7 @@
 
         private void UpdatePreview()
         {
-            int factor = 4;
-            int width = this.pctCards.Width / factor;
-            int height = this.pctCards.Height / factor;
-            this.CurrentImage = Card.CreateCardsFromJson(JsonConvert.SerializeObject(this.currentData), new Size(width, height), factor);
+            this.CurrentImage = Card.CreateCardsFromJson(JsonConvert.SerializeObject(this.currentData));
             this.PaintImage();
         }
 
@@ -260,13 +255,8 @@
                 RestoreDirectory = true
             };
 
-            if (ofd.ShowDialog() == DialogResult.OK && 
-                !string.IsNullOrEmpty(ofd.FileName))
-            {
-                return;
-            }
-
-            if (string.IsNullOrEmpty(ofd.FileName))
+            if (ofd.ShowDialog() != DialogResult.OK ||
+                string.IsNullOrEmpty(ofd.FileName))
             {
                 return;
             }
@@ -283,25 +273,49 @@
             }
 
             this.currentData = JsonConvert.DeserializeObject<CardData>(json);
+            this.UpdateText();
             this.UpdatePreview();
-            this.SetButtonState();
         }
 
-        private void SetButtonState()
+        private void UpdateText()
         {
-            this.btnPreview.Enabled = this.CurrentImage != null;
-            this.btnSave.Enabled = this.CurrentImage != null;
+            this.tbName.Text = this.currentData.Name;
+            this.tbGreenA.Text = string.Join(Environment.NewLine, this.currentData.TextGreenA);
+            this.tbGreenB.Text = string.Join(Environment.NewLine, this.currentData.TextGreenB);
+            this.tbGreenC.Text = string.Join(Environment.NewLine, this.currentData.TextGreenC);
+            this.tbOrangeA.Text = string.Join(Environment.NewLine, this.currentData.TextOrangeA);
+            this.tbOrangeB.Text = string.Join(Environment.NewLine, this.currentData.TextOrangeB);
+            this.tbOrangeC.Text = string.Join(Environment.NewLine, this.currentData.TextOrangeC);
+            this.tbRedA.Text = string.Join(Environment.NewLine, this.currentData.TextRedA);
+            this.tbRedB.Text = string.Join(Environment.NewLine, this.currentData.TextRedB);
+            this.tbRedC.Text = string.Join(Environment.NewLine, this.currentData.TextRedC);
+            this.tbFooterGreen.Text = this.currentData.FooterGreen;
+            this.tbFooterOrange.Text = this.currentData.FooterOrange;
+            this.tbFooterRed.Text = this.currentData.FooterRed;
         }
 
-        private void OnPreview(object sender, EventArgs e)
+        private void OnSaveJson(object sender, EventArgs e)
         {
-            if (this.CurrentImage == null)
+            if (this.currentData == null)
             {
                 return;
             }
 
-            PreviewCards preview = new PreviewCards(this.CurrentImage);
-            preview.Show();
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = @"json files (*.json)|*.json",
+                FilterIndex = 1,
+                RestoreDirectory = true
+            };
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                string json = JsonConvert.SerializeObject(this.currentData,Formatting.Indented);
+                using (StreamWriter writer = File.CreateText(sfd.FileName))
+                {
+                    writer.Write(json);
+                }
+            }
         }
 
         private void OnSave(object sender, EventArgs e)
@@ -320,28 +334,11 @@
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                const float inchInMm = 25.4F;
-                Size sizeInMm = new Size(49, 75);
-                Size imageSize = new Size((int)(sizeInMm.Width / inchInMm * Cards.Resolution), (int)(sizeInMm.Height / inchInMm * Cards.Resolution));
-                Image imgToSave = Card.CreateCardsFromJson(JsonConvert.SerializeObject(this.currentData), imageSize, Cards.Resolution);
+                Image imgToSave = Card.CreateCardsFromJson(JsonConvert.SerializeObject(this.currentData));
                 imgToSave.Save(sfd.FileName, ImageFormat.Jpeg);
             }
 
             this.CurrentImage = null;
-            this.SetButtonState();
-        }
-
-        private void OnSample(object sender, EventArgs e)
-        {
-            string json;
-            string jsonFile = AppDomain.CurrentDomain.BaseDirectory + @"/sample.json";
-            using (StreamReader r = new StreamReader(jsonFile))
-            {
-                json = r.ReadToEnd();
-            }
-
-            ViewSample sample = new ViewSample(json);
-            sample.Show();
         }
     }
 }
