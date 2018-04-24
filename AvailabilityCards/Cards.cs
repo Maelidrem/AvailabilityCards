@@ -43,6 +43,32 @@
 
         public Image CurrentImage { get; set; }
 
+        Image GetResizedImage(Image image, int width, int height)
+        {
+            double y = image.Height;
+            double x = image.Width;
+
+            double factor = 1;
+            if (width > 0)
+            {
+                factor = width / x;
+            }
+            else if (height > 0)
+            {
+                factor = height / y;
+            }
+            System.IO.MemoryStream outStream = new System.IO.MemoryStream();
+            Bitmap imgOut = new Bitmap((int)(x * factor), (int)(y * factor));
+
+            imgOut.SetResolution(72, 72);
+
+            Graphics g = Graphics.FromImage(imgOut);
+            g.Clear(Color.White);
+            g.DrawImage(image, new Rectangle(0, 0, (int)(factor * x), (int)(factor * y)), new Rectangle(0, 0, (int)x, (int)y), GraphicsUnit.Pixel);
+
+            return imgOut;
+        }
+
         private void OnTextChanged(object sender, EventArgs e)
         {
             TextBox box = sender as TextBox;
@@ -58,26 +84,26 @@
             }
 
             this.UpdateCardData(type, box.Text);
-            this.UpdatePreview();
         }
 
+        private int resolution = 300;
         private void UpdatePreview()
         {
-            this.CurrentImage = Card.CreateCardsFromJson(JsonConvert.SerializeObject(this.currentData));
-            this.PaintImage();
+            this.CurrentImage = Card.CreateCardsFromJson(JsonConvert.SerializeObject(this.currentData), this.resolution);
+            this.PaintImage(this.GetResizedImage(this.CurrentImage, this.pctCards.Width, this.pctCards.Height));
         }
 
-        private void PaintImage()
+        private void PaintImage(Image image)
         {
             RectangleF rectSource = new RectangleF(0, 0, this.CurrentImage.Width, this.CurrentImage.Height);
             RectangleF rectDestination = new RectangleF(0, 0, this.pctCards.Width, this.pctCards.Height);
 
-            using (Graphics g = Graphics.FromImage(this.emptyImage))
+            using (Graphics g = Graphics.FromImage(image))
             {
-                g.DrawImage(this.CurrentImage, rectDestination, rectSource, GraphicsUnit.Pixel);
+                g.DrawImage(image, new PointF(0, 0));
             }
 
-            this.pctCards.Image = this.CurrentImage;
+            this.pctCards.Image = image;
         }
 
         private void UpdateCardData(CardDataType type, string text)
@@ -129,6 +155,7 @@
 
         private void OnTextLeave(object sender, EventArgs e)
         {
+            this.UpdatePreview();
             TextBox box = sender as TextBox;
             if (box == null || box.Text.Length != 0)
             {
@@ -334,7 +361,7 @@
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                Image imgToSave = Card.CreateCardsFromJson(JsonConvert.SerializeObject(this.currentData));
+                Image imgToSave = Card.CreateCardsFromJson(JsonConvert.SerializeObject(this.currentData), this.resolution);
                 imgToSave.Save(sfd.FileName, ImageFormat.Jpeg);
             }
 

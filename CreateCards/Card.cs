@@ -8,9 +8,7 @@ namespace CreateCards
 
     public static class Card
     {
-        private const int resolution = 300;
-
-        public static Image CreateCardsFromJson(string json)
+        public static Image CreateCardsFromJson(string json, int resolution)
         {
             CardData data;
             const float inchInMm = 25.4F;
@@ -51,21 +49,21 @@ namespace CreateCards
             {
                 new List<Image>
                 {
-                    Card.Create(imageSize, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenA, data.FooterGreen),
-                    Card.Create(imageSize, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenB, data.FooterGreen),
-                    Card.Create(imageSize, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenC, data.FooterGreen)
+                    Card.Create(imageSize, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenA, data.FooterGreen, resolution),
+                    Card.Create(imageSize, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenB, data.FooterGreen, resolution),
+                    Card.Create(imageSize, backColors[0], nameColors[0], textColors[0], data.Name, data.TextGreenC, data.FooterGreen, resolution)
                 },
                 new List<Image>
                 {
-                    Card.Create(imageSize, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeA, data.FooterOrange),
-                    Card.Create(imageSize, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeB, data.FooterOrange),
-                    Card.Create(imageSize, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeC, data.FooterOrange)
+                    Card.Create(imageSize, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeA, data.FooterOrange, resolution),
+                    Card.Create(imageSize, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeB, data.FooterOrange, resolution),
+                    Card.Create(imageSize, backColors[1], nameColors[1], textColors[1], data.Name, data.TextOrangeC, data.FooterOrange, resolution)
                 },
                 new List<Image>
                 {
-                    Card.Create(imageSize, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedA, data.FooterRed),
-                    Card.Create(imageSize, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedB, data.FooterRed),
-                    Card.Create(imageSize, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedC, data.FooterRed)
+                    Card.Create(imageSize, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedA, data.FooterRed, resolution),
+                    Card.Create(imageSize, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedB, data.FooterRed, resolution),
+                    Card.Create(imageSize, backColors[2], nameColors[2], textColors[2], data.Name, data.TextRedC, data.FooterRed, resolution)
                 }
             };
             
@@ -99,7 +97,7 @@ namespace CreateCards
             return imageA4;
         }
 
-        public static Image Create(Size imageSize, Color backColor, Color nameColor, Color textColor, string header, List<string> body, string footer)
+        public static Image Create(Size imageSize, Color backColor, Color nameColor, Color textColor, string header, List<string> body, string footer, int resolution)
         {
             const int linePad = 60;
             const string fontName = "MS Sans Serif";
